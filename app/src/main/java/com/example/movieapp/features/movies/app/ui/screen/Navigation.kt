@@ -32,7 +32,9 @@ fun MainNavHost() {
         ) { backStackEntry ->
             val movieId = backStackEntry.arguments?.getInt("movieId")
             val viewModel: MovieDetailsViewModel = hiltViewModel()
-            MovieDetailsScreen(movieId = movieId, viewModel = viewModel, modifier = Modifier)
+            movieId?.let {
+                MovieDetailsScreen(movieId = movieId, viewModel = viewModel, modifier = Modifier)
+            }
         }
     }
 }

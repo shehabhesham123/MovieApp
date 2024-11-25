@@ -3,7 +3,9 @@ package com.example.movieapp.features.movies.data.repo
 import com.example.movieapp.core.failure.Failure
 import com.example.movieapp.core.funcational.Either
 import com.example.movieapp.features.movies.app.viewmodel.model.Movie
+import com.example.movieapp.features.movies.app.viewmodel.model.MovieDetails
 import com.example.movieapp.features.movies.data.remote.ApiService
+import com.example.movieapp.features.movies.domain.entity.MovieDetailsEntity
 import com.example.movieapp.features.movies.domain.entity.MoviesResponse
 import com.example.movieapp.features.movies.domain.repo.MoviesRepo
 import retrofit2.Call
@@ -17,6 +19,15 @@ class MoviesRepoImpl(private val apiService: ApiService) : MoviesRepo() {
             { response ->
                 response.results.map { it.toMovie() }
             }, MoviesResponse.empty()
+        )
+    }
+
+    override suspend fun getMovieDetails(movieId: Int): Either<Failure, MovieDetails> {
+        return request(
+            apiService.getMovieDetails(movieId),
+            { response ->
+                response.toMovieDetails()
+            }, MovieDetailsEntity.empty()
         )
     }
 

@@ -17,6 +17,6 @@ data class MovieEntity(
     val video: Boolean,
     val vote_average: Double,
     val vote_count: Int
-){
-    fun toMovie() = Movie(title, poster_path)
+) {
+    fun toMovie() = Movie(id, title, "https://image.tmdb.org/t/p/w500/${poster_path}")
 }

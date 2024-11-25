@@ -7,32 +7,46 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.example.movieapp.features.movies.app.viewmodel.model.Movie
+import com.example.movieapp.features.movies.app.viewmodel.viewmodel.MoviesViewModel
 
 @Composable
-fun MoviesScreen(movies: List<Movie>, modifier: Modifier = Modifier, onScrollFinished: () -> Unit) {
+fun MoviesScreen(
+    modifier: Modifier = Modifier,
+    viewModel: MoviesViewModel,
+    navController: NavController
+) {
+    LaunchedEffect(Unit) {
+        viewModel.getMovies()
+    }
+
     LazyVerticalGrid(
         GridCells.Fixed(3),
         modifier = modifier
     ) {
-        items(movies.size) { index ->
-            MovieField(movie = movies[index], modifier = Modifier.padding(2.dp)) {
-
+        items(viewModel.movies.size) { index ->
+            MovieField(movie = viewModel.movies[index], modifier = Modifier.padding(2.dp)) {
+                navController.navigate("Movie/${viewModel.movies[index].id}")
             }
-            if (index == movies.size - 1) onScrollFinished()
+            if (index == viewModel.movies.size - 1)
+                viewModel.getMovies()
         }
     }
 }
 
 @Composable
 fun MovieField(movie: Movie, modifier: Modifier, onClick: () -> Unit) {
-    Box(modifier.clickable { }) {
+    Box(modifier.clickable {
+        onClick()
+    }) {
         AsyncImage(
-            model = "https://image.tmdb.org/t/p/w500/${movie.poster}",
+            model = movie.poster,
             contentDescription = null,
         )
         Text(text = movie.name, modifier = Modifier.align(Alignment.BottomCenter))

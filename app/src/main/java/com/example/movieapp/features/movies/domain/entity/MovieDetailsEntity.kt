@@ -12,6 +12,7 @@ data class MovieDetailsEntity(
     val poster_path: String,
     val release_date: String,
     val title: String,
+    val runtime: Int,
     val vote_average: Double,
     val vote_count: Int
 ) {
@@ -22,12 +23,14 @@ data class MovieDetailsEntity(
             title,
             "https://image.tmdb.org/t/p/w500/${poster_path}",
             overview,
+            runtime,
             release_date,
-            vote_average
+            vote_average,
+            genres
         )
     }
 
     companion object {
-        fun empty() = MovieDetailsEntity(0, emptyList(), 0, "", "", 0.0, "", "", "", 0.0, 0)
+        fun empty() = MovieDetailsEntity(0, emptyList(), 0, "", "", 0.0, "", "", "", 0, 0.0, 0)
     }
 }
